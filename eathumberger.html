@@ -1,0 +1,1214 @@
+<!doctype html>
+<html lang="zh-TW" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>堡了沒 The Filling Station - 美式漢堡</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=Montserrat:wght@400;600;700;900&amp;display=swap" rel="stylesheet">
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      color: #1a1a1a;
+      background-color: #f5f5f5;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ========== 全局樣式 ========== */
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Bebas Neue', cursive, sans-serif;
+      letter-spacing: 2px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* ========== 導航列 (Header) ========== */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background-color: rgba(255, 204, 0, 0.95);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      transition: background-color 0.3s ease;
+    }
+
+    header.scrolled {
+      background-color: rgba(255, 204, 0, 0.85);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      font-size: 24px;
+      font-family: 'Bebas Neue', cursive, sans-serif;
+      color: #1a1a1a;
+      font-weight: 700;
+      letter-spacing: 1px;
+      transition: transform 0.3s ease;
+    }
+
+    .logo:hover {
+      transform: scale(1.05);
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #E60000 0%, #FFCC00 100%);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: bold;
+      color: white;
+      box-shadow: 0 6px 16px rgba(230, 0, 0, 0.3);
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    nav a {
+      color: #1a1a1a;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      letter-spacing: 1px;
+      position: relative;
+      transition: color 0.3s ease;
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: #E60000;
+      transition: width 0.3s ease;
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    /* ========== 行動版導航 ========== */
+    @media (max-width: 768px) {
+      nav ul {
+        gap: 1rem;
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        right: 0;
+        background-color: rgba(255, 204, 0, 0.98);
+        padding: 1.5rem;
+        border-radius: 0 0 0 12px;
+        display: none;
+        min-width: 200px;
+      }
+
+      nav ul.active {
+        display: flex;
+      }
+
+      .hamburger {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        background: none;
+        border: none;
+        cursor: pointer;
+      }
+
+      .hamburger span {
+        width: 25px;
+        height: 3px;
+        background-color: #1a1a1a;
+        border-radius: 2px;
+        transition: all 0.3s ease;
+      }
+
+      .hamburger.active span:nth-child(1) {
+        transform: rotate(45deg) translate(8px, 8px);
+      }
+
+      .hamburger.active span:nth-child(2) {
+        opacity: 0;
+      }
+
+      .hamburger.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(7px, -7px);
+      }
+    }
+
+    @media (min-width: 769px) {
+      .hamburger {
+        display: none;
+      }
+    }
+
+    /* ========== 英雄區塊 (Hero Section) ========== */
+    .hero-section {
+      position: relative;
+      height: 500px;
+      overflow: hidden;
+      background: linear-gradient(135deg, #FFCC00 0%, #FFF8DC 100%);
+      margin-bottom: 60px;
+    }
+
+    .carousel {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+    }
+
+    .carousel-slide {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+      padding: 60px;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
+
+    .carousel-slide.active {
+      opacity: 1;
+    }
+
+    .slide-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .slide-title {
+      font-size: 48px;
+      color: #1a1a1a;
+      line-height: 1.1;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .slide-subtitle {
+      font-size: 18px;
+      color: #E60000;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    .slide-description {
+      font-size: 14px;
+      color: #555;
+      line-height: 1.6;
+    }
+
+    .slide-price {
+      font-size: 32px;
+      font-weight: 700;
+      color: #E60000;
+      font-family: 'Bebas Neue', cursive, sans-serif;
+      letter-spacing: 1px;
+    }
+
+    .cta-button {
+      display: inline-block;
+      background: linear-gradient(135deg, #E60000 0%, #CC0000 100%);
+      color: white;
+      padding: 14px 32px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 1px;
+      cursor: pointer;
+      border: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 20px rgba(230, 0, 0, 0.3);
+      width: fit-content;
+    }
+
+    .cta-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 28px rgba(230, 0, 0, 0.4);
+    }
+
+    .cta-button:active {
+      transform: translateY(-1px);
+    }
+
+    .slide-image {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
+
+    .slide-image img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 12px 32px rgba(0, 0, 0, 0.15));
+    }
+
+    /* 輪播指示點 */
+    .carousel-dots {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 12px;
+      z-index: 100;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background-color: rgba(26, 26, 26, 0.3);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+    }
+
+    .dot.active {
+      background-color: #E60000;
+      width: 32px;
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(230, 0, 0, 0.4);
+    }
+
+    /* ========== 行動版英雄區塊 ========== */
+    @media (max-width: 768px) {
+      .hero-section {
+        height: 400px;
+        margin-bottom: 40px;
+      }
+
+      .carousel-slide {
+        grid-template-columns: 1fr;
+        padding: 40px 20px;
+        gap: 20px;
+      }
+
+      .slide-title {
+        font-size: 36px;
+      }
+
+      .slide-image {
+        height: 200px;
+      }
+    }
+
+    /* ========== 菜單區塊 (Menu Section) ========== */
+    .menu-section {
+      padding: 80px 0;
+      background-color: #ffffff;
+      position: relative;
+    }
+
+    .menu-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #FFCC00, transparent);
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 48px;
+      color: #1a1a1a;
+      margin-bottom: 50px;
+      position: relative;
+      letter-spacing: 2px;
+    }
+
+    .section-title::after {
+      content: '';
+      display: block;
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(90deg, #E60000, #FFCC00);
+      margin: 20px auto 0;
+      border-radius: 2px;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+
+    .menu-card {
+      background-color: #f5f5f5;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .menu-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 16px 40px rgba(230, 0, 0, 0.2);
+    }
+
+    .menu-image-wrapper {
+      position: relative;
+      width: 100%;
+      height: 220px;
+      overflow: hidden;
+      background-color: #e0e0e0;
+    }
+
+    .menu-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .menu-card:hover .menu-image {
+      transform: scale(1.08);
+    }
+
+    .badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background-color: #E60000;
+      color: white;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 12px rgba(230, 0, 0, 0.3);
+      z-index: 10;
+    }
+
+    .menu-content {
+      padding: 24px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .menu-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: #1a1a1a;
+      line-height: 1.2;
+      letter-spacing: 1px;
+    }
+
+    .menu-subtitle {
+      font-size: 12px;
+      color: #E60000;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .menu-description {
+      font-size: 13px;
+      color: #666;
+      line-height: 1.5;
+      flex-grow: 1;
+    }
+
+    .menu-price {
+      font-size: 28px;
+      font-weight: 700;
+      color: #E60000;
+      font-family: 'Bebas Neue', cursive, sans-serif;
+      letter-spacing: 1px;
+      margin-top: 8px;
+    }
+
+    /* 骨架屏 (Skeleton Loader) */
+    .skeleton-card {
+      background-color: #f5f5f5;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      animation: pulse 1.5s infinite;
+    }
+
+    .skeleton-image {
+      width: 100%;
+      height: 220px;
+      background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+
+    .skeleton-content {
+      padding: 24px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .skeleton-line {
+      height: 16px;
+      background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      border-radius: 4px;
+    }
+
+    .skeleton-title {
+      height: 20px;
+      width: 80%;
+    }
+
+    .skeleton-description {
+      height: 12px;
+      width: 100%;
+    }
+
+    .skeleton-price {
+      height: 24px;
+      width: 60%;
+      margin-top: 8px;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.8; }
+    }
+
+    /* ========== 行動版菜單 ========== */
+    @media (max-width: 1024px) {
+      .menu-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .menu-section {
+        padding: 40px 0;
+      }
+
+      .section-title {
+        font-size: 36px;
+        margin-bottom: 30px;
+      }
+
+      .menu-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .menu-card {
+        border-radius: 12px;
+      }
+
+      .menu-image-wrapper {
+        height: 200px;
+      }
+    }
+
+    /* ========== 錯誤狀態 ========== */
+    .error-container {
+      text-align: center;
+      padding: 60px 20px;
+      background-color: #fff5f5;
+      border-radius: 16px;
+      border: 2px solid #E60000;
+      margin: 40px 0;
+    }
+
+    .error-icon {
+      font-size: 48px;
+      margin-bottom: 20px;
+    }
+
+    .error-message {
+      font-size: 16px;
+      color: #E60000;
+      margin-bottom: 24px;
+      font-weight: 600;
+    }
+
+    .retry-button {
+      background: linear-gradient(135deg, #E60000 0%, #CC0000 100%);
+      color: white;
+      padding: 12px 28px;
+      border-radius: 8px;
+      border: none;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 16px rgba(230, 0, 0, 0.3);
+    }
+
+    .retry-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(230, 0, 0, 0.4);
+    }
+
+    /* ========== 門市區塊 (Locations Section) ========== */
+    .locations-section {
+      padding: 80px 0;
+      background: linear-gradient(135deg, #FFCC00 0%, #FFF8DC 100%);
+      position: relative;
+    }
+
+    .locations-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #E60000, transparent);
+    }
+
+    .locations-title {
+      font-size: 48px;
+      color: #1a1a1a;
+      margin-bottom: 60px;
+      text-align: center;
+      letter-spacing: 2px;
+      position: relative;
+    }
+
+    .locations-title::after {
+      content: '';
+      display: block;
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(90deg, #1a1a1a, #E60000);
+      margin: 20px auto 0;
+      border-radius: 2px;
+    }
+
+    .locations-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .location-image {
+      width: 100%;
+      height: 400px;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
+    }
+
+    .location-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .location-info {
+      background-color: white;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+
+    .info-block {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 32px;
+      padding-bottom: 24px;
+      border-bottom: 2px solid #f0f0f0;
+    }
+
+    .info-block:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+    }
+
+    .info-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #FFCC00 0%, #FFC800 100%);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(255, 204, 0, 0.3);
+    }
+
+    .info-content h3 {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .info-content p {
+      font-size: 16px;
+      color: #1a1a1a;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    /* ========== 行動版門市 ========== */
+    @media (max-width: 768px) {
+      .locations-section {
+        padding: 40px 0;
+      }
+
+      .locations-title {
+        font-size: 36px;
+        margin-bottom: 40px;
+      }
+
+      .locations-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+
+      .location-image {
+        height: 300px;
+      }
+
+      .location-info {
+        padding: 24px;
+      }
+
+      .info-block {
+        gap: 12px;
+        margin-bottom: 20px;
+        padding-bottom: 16px;
+      }
+
+      .info-content p {
+        font-size: 14px;
+      }
+    }
+
+    /* ========== 頁尾 (Footer) ========== */
+    footer {
+      background-color: #1a1a1a;
+      color: #f5f5f5;
+      padding: 40px 0 20px;
+      text-align: center;
+      margin-top: 60px;
+    }
+
+    .footer-content {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .footer-social {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .social-link {
+      width: 40px;
+      height: 40px;
+      background-color: #FFCC00;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #1a1a1a;
+      text-decoration: none;
+      font-size: 18px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(255, 204, 0, 0.3);
+    }
+
+    .social-link:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 16px rgba(255, 204, 0, 0.4);
+    }
+
+    .footer-copyright {
+      font-size: 13px;
+      color: #999;
+      border-top: 1px solid #333;
+      padding-top: 20px;
+    }
+
+    .footer-copyright p {
+      margin: 8px 0;
+      letter-spacing: 0.5px;
+    }
+
+    /* ========== 平滑滾動 ========== */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* ========== 通用 ========== */
+    .hidden {
+      display: none;
+    }
+
+    a {
+      color: inherit;
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body><!-- ========== 導航列 ========== -->
+  <header id="header">
+   <div class="container">
+    <div class="header-content"><a href="#" class="logo">
+      <div class="logo-icon">
+       🍔
+      </div><span id="brand-name">堡了沒</span> </a>
+     <nav><button class="hamburger" id="hamburger"> <span></span> <span></span> <span></span> </button>
+      <ul id="nav-menu">
+       <li><a href="#home" class="nav-link">首頁</a></li>
+       <li><a href="#menu" class="nav-link">菜單</a></li>
+       <li><a href="#locations" class="nav-link">門市</a></li>
+      </ul>
+     </nav>
+    </div>
+   </div>
+  </header><!-- ========== 英雄區塊 (輪播) ========== -->
+  <section id="home" class="hero-section">
+   <div class="carousel" id="carousel"><!-- 由 JavaScript 動態生成 -->
+   </div>
+   <div class="carousel-dots" id="carousel-dots"><!-- 由 JavaScript 動態生成 -->
+   </div>
+  </section><!-- ========== 菜單區塊 ========== -->
+  <section id="menu" class="menu-section">
+   <div class="container">
+    <h2 class="section-title">我們的菜單</h2>
+    <div class="menu-grid" id="menu-grid"><!-- 由 JavaScript 動態生成 -->
+    </div>
+    <div id="error-container" class="error-container hidden">
+     <div class="error-icon">
+      ⚠️
+     </div>
+     <div class="error-message" id="error-message">
+      載入菜單失敗，請稍後重試
+     </div><button class="retry-button" onclick="loadMenuData()">重新載入</button>
+    </div>
+   </div>
+  </section><!-- ========== 門市區塊 ========== -->
+  <section id="locations" class="locations-section">
+   <div class="container">
+    <h2 class="locations-title" id="locations-title">我們的門市</h2>
+    <div class="locations-grid"><!-- 左側門市圖片 -->
+     <div class="location-image"><img src="https://images.unsplash.com/photo-1555521760-e54c2d2309bf?w=600&amp;h=400&amp;fit=crop" alt="堡了沒門市外觀" loading="lazy" onerror="this.style.background='linear-gradient(135deg, #FFCC00 0%, #FFC800 100%)'; this.src=''; this.alt='圖片載入失敗';">
+     </div><!-- 右側門市資訊 -->
+     <div class="location-info"><!-- 地址 -->
+      <div class="info-block">
+       <div class="info-icon">
+        📍
+       </div>
+       <div class="info-content">
+        <h3>地址</h3>
+        <p id="location-address">台北市信義區信義路五段100號</p>
+       </div>
+      </div><!-- 電話 -->
+      <div class="info-block">
+       <div class="info-icon">
+        ☎️
+       </div>
+       <div class="info-content">
+        <h3>聯絡電話</h3>
+        <p id="location-phone">(02) 8729-1000</p>
+       </div>
+      </div><!-- 營業時間 -->
+      <div class="info-block">
+       <div class="info-icon">
+        🕐
+       </div>
+       <div class="info-content">
+        <h3>營業時間</h3>
+        <p id="location-hours">平日 11:00-22:00 / 假日 10:00-23:00</p>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+  </section><!-- ========== 頁尾 ========== -->
+  <footer>
+   <div class="container">
+    <div class="footer-content">
+     <div class="footer-social"><a href="#" class="social-link" title="Facebook">f</a> <a href="#" class="social-link" title="Instagram">📷</a> <a href="#" class="social-link" title="Twitter">𝕏</a>
+     </div>
+     <div class="footer-copyright">
+      <p>© 2026 The Filling Station All Rights Reserved</p>
+      <p>堡了沒｜美式漢堡｜台北信義</p>
+     </div>
+    </div>
+   </div>
+  </footer><!-- ========== JavaScript ========== -->
+  <script>
+    // ========== 配置與常數 ========== 
+    const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQCMesTLgVIjqOAq1-NbcajKgFOly4-BTSc00CLBlchJw6CUKjtUsur9LopWhE42uZJXsIS2NrjGOrB/pub?gid=0&single=true&output=csv';
+
+    const defaultConfig = {
+      brand_name: '堡了沒',
+      hero_title: 'Legendary Burgers Since 2026',
+      locations_title: '我們的門市',
+      locations_address: '台北市信義區信義路五段100號',
+      locations_phone: '(02) 8729-1000',
+      locations_hours: '平日 11:00-22:00 / 假日 10:00-23:00',
+      primary_color: '#FFCC00',
+      accent_color: '#E60000',
+      background_color: '#f5f5f5',
+      text_color: '#1a1a1a'
+    };
+
+    let config = { ...defaultConfig };
+    let menuData = [];
+    let carouselIndex = 0;
+
+    // ========== CSV 解析函數 ========== 
+    /**
+     * 解析 CSV 字串為二維陣列
+     * 需要處理引號和換行符號避免破版
+     */
+    function parseCSV(text) {
+      const lines = text.split('\n').filter(line => line.trim());
+      const result = [];
+      
+      for (let i = 0; i < lines.length; i++) {
+        const row = [];
+        let cell = '';
+        let inQuotes = false;
+        
+        for (let j = 0; j < lines[i].length; j++) {
+          const char = lines[i][j];
+          
+          if (char === '"') {
+            if (inQuotes && lines[i][j + 1] === '"') {
+              cell += '"';
+              j++;
+            } else {
+              inQuotes = !inQuotes;
+            }
+          } else if (char === ',' && !inQuotes) {
+            row.push(cell.trim());
+            cell = '';
+          } else {
+            cell += char;
+          }
+        }
+        row.push(cell.trim());
+        result.push(row);
+      }
+      
+      return result;
+    }
+
+    // ========== 菜單資料載入 ========== 
+    /**
+     * 從 Google Sheets 載入菜單資料
+     * 欄位對應：主標、副標、介紹、價格、備註、圖片連結
+     */
+    async function loadMenuData() {
+      const menuGrid = document.getElementById('menu-grid');
+      const errorContainer = document.getElementById('error-container');
+      
+      // 顯示骨架屏
+      menuGrid.innerHTML = Array(6).fill(0).map(() => `
+        <div class="skeleton-card">
+          <div class="skeleton-image"></div>
+          <div class="skeleton-content">
+            <div class="skeleton-line skeleton-title"></div>
+            <div class="skeleton-line skeleton-description"></div>
+            <div class="skeleton-line skeleton-description"></div>
+            <div class="skeleton-line skeleton-price"></div>
+          </div>
+        </div>
+      `).join('');
+      
+      errorContainer.classList.add('hidden');
+
+      try {
+        const response = await fetch(CSV_URL);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        
+        const csvText = await response.text();
+        const csvData = parseCSV(csvText);
+        
+        // 跳過標題行，從第二行開始解析菜單項目
+        menuData = csvData.slice(1).filter(row => row[0]).map(row => ({
+          title: row[0],        // 主標
+          subtitle: row[1],     // 副標
+          description: row[2],  // 介紹
+          price: row[3],        // 價格
+          note: row[4],         // 備註
+          image_url: row[5]     // 圖片連結
+        }));
+
+        // 初始化輪播（使用前5項）
+        initCarousel(menuData.slice(0, 5));
+
+        // 渲染菜單網格
+        renderMenuGrid(menuData);
+      } catch (error) {
+        console.error('菜單載入失敗:', error);
+        menuGrid.innerHTML = '';
+        errorContainer.classList.remove('hidden');
+        document.getElementById('error-message').textContent = `載入失敗: ${error.message}`;
+      }
+    }
+
+    // ========== 輪播初始化 ========== 
+    /**
+     * 初始化英雄區塊輪播
+     * 支援無限循環和進度指示點
+     */
+    function initCarousel(items) {
+      const carousel = document.getElementById('carousel');
+      const dots = document.getElementById('carousel-dots');
+      
+      carousel.innerHTML = items.map((item, index) => `
+        <div class="carousel-slide ${index === 0 ? 'active' : ''}">
+          <div class="slide-content">
+            <div class="slide-subtitle">${item.subtitle || '經典美式'}</div>
+            <h1 class="slide-title">${item.title}</h1>
+            <p class="slide-description">${item.description || ''}</p>
+            <div class="slide-price">NT$ ${item.price || '0'}</div>
+            <button class="cta-button" onclick="document.getElementById('menu').scrollIntoView();">馬上了解</button>
+          </div>
+          <div class="slide-image">
+            <img src="${item.image_url || ''}" 
+                 alt="${item.title}" 
+                 loading="lazy"
+                 onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22%3E%3Crect fill=%22%23e0e0e0%22 width=%22400%22 height=%22300%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2224%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%23999%22%3E圖片載入中%3C/text%3E%3C/svg%3E';" />
+          </div>
+        </div>
+      `).join('');
+
+      dots.innerHTML = items.map((_, index) => `
+        <div class="dot ${index === 0 ? 'active' : ''}" onclick="goToSlide(${index})"></div>
+      `).join('');
+
+      // 自動輪播（每5秒切換）
+      setInterval(() => {
+        carouselIndex = (carouselIndex + 1) % items.length;
+        updateCarousel();
+      }, 5000);
+    }
+
+    /**
+     * 更新輪播位置
+     */
+    function updateCarousel() {
+      const slides = document.querySelectorAll('.carousel-slide');
+      const dots = document.querySelectorAll('.dot');
+
+      slides.forEach((slide, index) => {
+        slide.classList.toggle('active', index === carouselIndex);
+      });
+
+      dots.forEach((dot, index) => {
+        dot.classList.toggle('active', index === carouselIndex);
+      });
+    }
+
+    /**
+     * 跳至特定輪播位置
+     */
+    function goToSlide(index) {
+      carouselIndex = index;
+      updateCarousel();
+    }
+
+    // ========== 菜單網格渲染 ========== 
+    /**
+     * 渲染菜單卡片網格
+     * 使用 Grid 網格系統，桌機3欄/平板2欄/手機1欄
+     */
+    function renderMenuGrid(items) {
+      const menuGrid = document.getElementById('menu-grid');
+      
+      menuGrid.innerHTML = items.map(item => `
+        <div class="menu-card">
+          <div class="menu-image-wrapper">
+            <img class="menu-image" 
+                 src="${item.image_url || ''}" 
+                 alt="${item.title}"
+                 loading="lazy"
+                 onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22%3E%3Crect fill=%22%23e0e0e0%22 width=%22400%22 height=%22300%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2224%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%23999%22%3E圖片載入中%3C/text%3E%3C/svg%3E';" />
+            ${item.note ? `<div class="badge">${item.note}</div>` : ''}
+          </div>
+          <div class="menu-content">
+            <div class="menu-subtitle">${item.subtitle || '經典系列'}</div>
+            <h3 class="menu-title">${item.title}</h3>
+            <p class="menu-description">${item.description || '正宗美式漢堡，香到不行'}</p>
+            <div class="menu-price">NT$ ${item.price || '0'}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // ========== Header 滾動效果 ========== 
+    /**
+     * 監控滾動位置，當超過 Hero 區塊時調整 Header 背景透明度
+     */
+    window.addEventListener('scroll', () => {
+      const header = document.getElementById('header');
+      const heroSection = document.getElementById('home');
+      const scrollPosition = window.scrollY;
+      const heroHeight = heroSection.offsetHeight;
+
+      if (scrollPosition > heroHeight * 0.3) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+
+    // ========== 行動版導航 ========== 
+    /**
+     * 切換行動版漢堡選單
+     */
+    const hamburger = document.getElementById('hamburger');
+    const navMenu = document.getElementById('nav-menu');
+
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('active');
+      navMenu.classList.toggle('active');
+    });
+
+    // 點擊導航連結時關閉選單
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', () => {
+        hamburger.classList.remove('active');
+        navMenu.classList.remove('active');
+      });
+    });
+
+    // ========== Element SDK 整合 ========== 
+    /**
+     * 初始化 Element SDK 以支援 Canva 編輯面板
+     */
+    async function onConfigChange(cfg) {
+      document.getElementById('brand-name').textContent = cfg.brand_name || defaultConfig.brand_name;
+      document.getElementById('locations-title').textContent = cfg.locations_title || defaultConfig.locations_title;
+      document.getElementById('location-address').textContent = cfg.locations_address || defaultConfig.locations_address;
+      document.getElementById('location-phone').textContent = cfg.locations_phone || defaultConfig.locations_phone;
+      document.getElementById('location-hours').textContent = cfg.locations_hours || defaultConfig.locations_hours;
+    }
+
+    function mapToCapabilities(cfg) {
+      return {
+        recolorables: [
+          {
+            get: () => cfg.primary_color || defaultConfig.primary_color,
+            set: (v) => { cfg.primary_color = v; window.elementSdk.setConfig({ primary_color: v }); }
+          },
+          {
+            get: () => cfg.accent_color || defaultConfig.accent_color,
+            set: (v) => { cfg.accent_color = v; window.elementSdk.setConfig({ accent_color: v }); }
+          },
+          {
+            get: () => cfg.background_color || defaultConfig.background_color,
+            set: (v) => { cfg.background_color = v; window.elementSdk.setConfig({ background_color: v }); }
+          },
+          {
+            get: () => cfg.text_color || defaultConfig.text_color,
+            set: (v) => { cfg.text_color = v; window.elementSdk.setConfig({ text_color: v }); }
+          }
+        ],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      };
+    }
+
+    function mapToEditPanelValues(cfg) {
+      return new Map([
+        ['brand_name', cfg.brand_name || defaultConfig.brand_name],
+        ['hero_title', cfg.hero_title || defaultConfig.hero_title],
+        ['locations_title', cfg.locations_title || defaultConfig.locations_title],
+        ['locations_address', cfg.locations_address || defaultConfig.locations_address],
+        ['locations_phone', cfg.locations_phone || defaultConfig.locations_phone],
+        ['locations_hours', cfg.locations_hours || defaultConfig.locations_hours]
+      ]);
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities,
+        mapToEditPanelValues
+      });
+      config = window.elementSdk.config || defaultConfig;
+    }
+
+    // ========== 頁面初始化 ========== 
+    document.addEventListener('DOMContentLoaded', () => {
+      loadMenuData();
+    });
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c5f6f4972f18466',t:'MTc2OTc2MDAxNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
